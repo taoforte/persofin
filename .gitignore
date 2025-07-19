@@ -1,0 +1,18 @@
+# macOS system files
+.DS_Store
+
+# Node.js (if you use it)
+node_modules/
+
+# PHP vendor folder (if you use Composer)
+vendor/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# Cache or temporary files
+*.tmp
+.cache/

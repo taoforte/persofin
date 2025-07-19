@@ -1,0 +1,30 @@
+[
+    {
+        "date": "2025-07-16",
+        "amount": 200,
+        "vendor": "EDF",
+        "category": "Utilities",
+        "description": "gas march apr",
+        "id": "687834600681d",
+        "created_at": "2025-07-16 23:23:12",
+        "updated_at": "2025-07-16 23:24:46"
+    },
+    {
+        "date": "2025-07-17",
+        "amount": 67,
+        "vendor": "Lidl",
+        "category": "Food & Dining",
+        "description": "var",
+        "id": "68784044b1a8d",
+        "created_at": "2025-07-17 00:13:56"
+    },
+    {
+        "date": "2025-07-17",
+        "amount": "67",
+        "vendor": "Lidl",
+        "category": "Food & Dining",
+        "description": "eda na ndelyu",
+        "id": "687b6067b44ff",
+        "created_at": "2025-07-19 09:07:51"
+    }
+]
