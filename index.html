@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Finance Manager v1.0.0</title>
+    <title>Personal Finance Manager v1.1.1</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,6 +21,38 @@
         </header>
 
         <main>
+
+            <!-- Transactions List -->
+            <section id="transactions-list" class="transactions-list">
+                <h2>All Transactions</h2>
+                <div id="loadingMessage" class="loading">Loading transactions...</div>
+                <div id="errorMessage" class="error" style="display: none;"></div>
+                
+                <table id="transactionsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Vendor</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        <!-- Transactions will be inserted here -->
+                    </tbody>
+                </table>
+                
+                <div id="noTransactionsMessage" class="no-transactions" style="display: none;">
+                    No transactions found. Add your first transaction above!
+                </div>
+                
+                <div id="noFilterResultsMessage" class="no-results" style="display: none;">
+                    No transactions match your search criteria. Try adjusting your filters.
+                </div>
+            </section>            
+
             <!-- Add Transaction Form -->
             <section id="add-transaction" class="add-transaction">
                 <h2 id="formTitle">Add New Transaction</h2>
@@ -224,38 +256,6 @@
 
 
 
-
-
-            <!-- Transactions List -->
-            <section id="transactions-list" class="transactions-list">
-                <h2>All Transactions</h2>
-                <div id="loadingMessage" class="loading">Loading transactions...</div>
-                <div id="errorMessage" class="error" style="display: none;"></div>
-                
-                <table id="transactionsTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Vendor</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionsTableBody">
-                        <!-- Transactions will be inserted here -->
-                    </tbody>
-                </table>
-                
-                <div id="noTransactionsMessage" class="no-transactions" style="display: none;">
-                    No transactions found. Add your first transaction above!
-                </div>
-                
-                <div id="noFilterResultsMessage" class="no-results" style="display: none;">
-                    No transactions match your search criteria. Try adjusting your filters.
-                </div>
-            </section>
         </main>
     </div>
 
