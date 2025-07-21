@@ -22,139 +22,6 @@
 
         <main>
 
-            <!-- Transactions List -->
-            <section id="transactions-list" class="transactions-list">
-                <h2>All Transactions</h2>
-                <div id="loadingMessage" class="loading">Loading transactions...</div>
-                <div id="errorMessage" class="error" style="display: none;"></div>
-                
-                <table id="transactionsTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Vendor</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionsTableBody">
-                        <!-- Transactions will be inserted here -->
-                    </tbody>
-                </table>
-                
-                <div id="noTransactionsMessage" class="no-transactions" style="display: none;">
-                    No transactions found. Add your first transaction above!
-                </div>
-                
-                <div id="noFilterResultsMessage" class="no-results" style="display: none;">
-                    No transactions match your search criteria. Try adjusting your filters.
-                </div>
-            </section>            
-
-            <!-- Add Transaction Form -->
-            <section id="add-transaction" class="add-transaction">
-                <h2 id="formTitle">Add New Transaction</h2>
-                <form id="transactionForm">
-                    <input type="hidden" id="editId" name="editId">
-                    <div class="form-group">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="amount">Amount:</label>
-                        <input type="number" id="amount" name="amount" step="1.00" placeholder="0.00" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="vendor">Vendor:</label>
-                        <input type="text" id="vendor" name="vendor" placeholder="Store name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="category">Category:</label>
-                        <select id="category" name="category" required>
-                            <option value="">Select a category</option>
-                            <option value="Food & Dining">Food & Dining</option>
-                            <option value="Transportation">Transportation</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Healthcare">Healthcare</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Housing">Housing</option>
-                            <option value="Income">Income</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea id="description" name="description" placeholder="Transaction description" required></textarea>
-                    </div>
-                    
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-primary" id="submitBtn">Add Transaction</button>
-                        <button type="button" class="btn-secondary" id="cancelBtn" style="display: none;">Cancel Edit</button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- Search and Filter Section -->
-            <section id="search-filter" class="search-filter">
-                <h2>Search & Filter</h2>
-                <div class="filter-grid">
-                    <div class="filter-group">
-                        <label for="searchInput">Search:</label>
-                        <input type="text" id="searchInput" placeholder="Search by vendor or description...">
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="categoryFilter">Category:</label>
-                        <select id="categoryFilter">
-                            <option value="">All Categories</option>
-                            <option value="Food & Dining">Food & Dining</option>
-                            <option value="Transportation">Transportation</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Healthcare">Healthcare</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Housing">Housing</option>
-                            <option value="Income">Income</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="dateFrom">From Date:</label>
-                        <input type="date" id="dateFrom">
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="dateTo">To Date:</label>
-                        <input type="date" id="dateTo">
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="amountFilter">Amount Type:</label>
-                        <select id="amountFilter">
-                            <option value="">All</option>
-                            <option value="income">Income (Positive)</option>
-                            <option value="expense">Expenses (Negative)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <button type="button" id="clearFilters" class="btn-secondary">Clear Filters</button>
-                    </div>
-                </div>
-                
-                <div class="filter-results">
-                    <span id="resultsCount">Showing all transactions</span>
-                </div>
-            </section>
-
             <!-- Statistics Section -->
             <section id="statistics" class="statistics">
                 <h2>Financial Summary</h2>
@@ -255,6 +122,138 @@
             </section>
 
 
+            <!-- Search and Filter Section -->
+            <section id="search-filter" class="search-filter">
+                <h2>Search & Filter</h2>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="searchInput">Search:</label>
+                        <input type="text" id="searchInput" placeholder="Search by vendor or description...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="categoryFilter">Category:</label>
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Housing">Housing</option>
+                            <option value="Income">Income</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateFrom">From Date:</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateTo">To Date:</label>
+                        <input type="date" id="dateTo">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="amountFilter">Amount Type:</label>
+                        <select id="amountFilter">
+                            <option value="">All</option>
+                            <option value="income">Income (Positive)</option>
+                            <option value="expense">Expenses (Negative)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <button type="button" id="clearFilters" class="btn-secondary">Clear Filters</button>
+                    </div>
+                </div>
+                
+                <div class="filter-results">
+                    <span id="resultsCount">Showing all transactions</span>
+                </div>
+            </section>            
+
+            <!-- Transactions List -->
+            <section id="transactions-list" class="transactions-list">
+                <h2>All Transactions</h2>
+                <div id="loadingMessage" class="loading">Loading transactions...</div>
+                <div id="errorMessage" class="error" style="display: none;"></div>
+                
+                <table id="transactionsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Vendor</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        <!-- Transactions will be inserted here -->
+                    </tbody>
+                </table>
+                
+                <div id="noTransactionsMessage" class="no-transactions" style="display: none;">
+                    No transactions found. Add your first transaction above!
+                </div>
+                
+                <div id="noFilterResultsMessage" class="no-results" style="display: none;">
+                    No transactions match your search criteria. Try adjusting your filters.
+                </div>
+            </section>            
+
+            <!-- Add Transaction Form -->
+            <section id="add-transaction" class="add-transaction">
+                <h2 id="formTitle">Add New Transaction</h2>
+                <form id="transactionForm">
+                    <input type="hidden" id="editId" name="editId">
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" id="amount" name="amount" step="1.00" placeholder="0.00" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vendor">Vendor:</label>
+                        <input type="text" id="vendor" name="vendor" placeholder="Store name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Housing">Housing</option>
+                            <option value="Income">Income</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" placeholder="Transaction description" required></textarea>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-primary" id="submitBtn">Add Transaction</button>
+                        <button type="button" class="btn-secondary" id="cancelBtn" style="display: none;">Cancel Edit</button>
+                    </div>
+                </form>
+            </section>
 
         </main>
     </div>
