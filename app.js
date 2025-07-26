@@ -373,45 +373,58 @@ function clearFilters() {
 
 // Update statistics
 function updateStatistics() {
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-    
-    // Filter transactions for current month
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    // This Month calculations
     const monthlyTransactions = filteredTransactions.filter(t => {
-        const transactionDate = new Date(t.date);
-        return transactionDate.getMonth() === currentMonth && 
-               transactionDate.getFullYear() === currentYear;
+        const d = new Date(t.date);
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
     });
-    
-    // Calculate totals
-    const totalIncome = monthlyTransactions
-        .filter(t => parseFloat(t.amount) > 0)
+    const monthlyIncome = monthlyTransactions.filter(t => parseFloat(t.amount) > 0)
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
-    
-    const totalExpenses = monthlyTransactions
-        .filter(t => parseFloat(t.amount) < 0)
+    const monthlyExpenses = monthlyTransactions.filter(t => parseFloat(t.amount) < 0)
         .reduce((sum, t) => sum + Math.abs(parseFloat(t.amount)), 0);
-    
-    const netAmount = totalIncome - totalExpenses;
+    const monthlyNet = monthlyIncome - monthlyExpenses;
+
+    // Overall calculations (all filtered transactions)
+    const totalIncome = filteredTransactions.filter(t => parseFloat(t.amount) > 0)
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    const totalExpenses = filteredTransactions.filter(t => parseFloat(t.amount) < 0)
+        .reduce((sum, t) => sum + Math.abs(parseFloat(t.amount)), 0);
+    const totalBalance = totalIncome - totalExpenses;
+
+    // Averages (for this month)
     const averageTransaction = monthlyTransactions.length > 0 
-        ? (totalIncome + totalExpenses) / monthlyTransactions.length 
+        ? (monthlyIncome + monthlyExpenses) / monthlyTransactions.length 
         : 0;
-    
-    // Update display
+
+    // Update DOM
+    // This Month
     const monthlyIncomeEl = document.getElementById('monthlyIncome');
     const monthlyExpensesEl = document.getElementById('monthlyExpenses');
     const monthlyNetEl = document.getElementById('monthlyNet');
+    if (monthlyIncomeEl) monthlyIncomeEl.textContent = `$${monthlyIncome.toFixed(2)}`;
+    if (monthlyExpensesEl) monthlyExpensesEl.textContent = `$${monthlyExpenses.toFixed(2)}`;
+    if (monthlyNetEl) monthlyNetEl.textContent = `$${monthlyNet.toFixed(2)}`;
+
+    // Overall
+    const totalIncomeEl = document.getElementById('totalIncome');
+    const totalExpensesEl = document.getElementById('totalExpenses');
+    const totalBalanceEl = document.getElementById('totalBalance');
+    if (totalIncomeEl) totalIncomeEl.textContent = `$${totalIncome.toFixed(2)}`;
+    if (totalExpensesEl) totalExpensesEl.textContent = `$${totalExpenses.toFixed(2)}`;
+    if (totalBalanceEl) totalBalanceEl.textContent = `$${totalBalance.toFixed(2)}`;
+
+    // Averages (for this month)
     const avgTransactionEl = document.getElementById('avgTransaction');
     const totalTransactionsEl = document.getElementById('totalTransactions');
-    
-    if (monthlyIncomeEl) monthlyIncomeEl.textContent = `$${totalIncome.toFixed(2)}`;
-    if (monthlyExpensesEl) monthlyExpensesEl.textContent = `$${totalExpenses.toFixed(2)}`;
-    if (monthlyNetEl) monthlyNetEl.textContent = `$${netAmount.toFixed(2)}`;
     if (avgTransactionEl) avgTransactionEl.textContent = `$${averageTransaction.toFixed(2)}`;
     if (totalTransactionsEl) totalTransactionsEl.textContent = monthlyTransactions.length;
-    
-    // Update category breakdown
-    updateCategoryBreakdown(monthlyTransactions);
+
+    // Update category breakdown (for this month)
+    updateCategoryBreakdown(filteredTransactions);
 }
 
 // Update category breakdown
