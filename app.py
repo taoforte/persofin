@@ -80,6 +80,58 @@ if not st.session_state.transactions.empty:
             file_name='finance_data.csv',
             mime='text/csv',
         )
+
+    st.divider()
+
+    # Edit / Delete Transactions
+    st.subheader("✏️ Manage Transactions")
+
+    INCOME_CATEGORIES = ["Salary", "Freelance", "Investment", "Gift", "Other"]
+    EXPENSE_CATEGORIES = ["Food", "Rent", "Utilities", "Transport", "Entertainment", "Shopping", "Health", "Other"]
+
+    # Build a display list mapping labels -> original index
+    tx_options = {
+        f"{row['Date']} | {row['Description']} | {row['Type']} | {row['Category']} | ${row['Amount']:,.2f}": idx
+        for idx, row in df.iterrows()
+    }
+    selected_label = st.selectbox(
+        "Select a transaction to edit or delete",
+        options=list(tx_options.keys()),
+        key="selected_transaction",
+    )
+    selected_idx = tx_options[selected_label]
+    sel_row = df.loc[selected_idx]
+
+    with st.form("edit_transaction_form"):
+        st.markdown(f"**Editing:** `{selected_label}`")
+        new_date = st.date_input("Date", value=pd.to_datetime(sel_row["Date"]).date(), key="edit_date")
+        new_description = st.text_input("Description", value=sel_row["Description"], key="edit_desc")
+        new_type = st.selectbox(
+            "Type",
+            ["Income", "Expense"],
+            index=0 if sel_row["Type"] == "Income" else 1,
+            key="edit_type",
+        )
+        cat_list = INCOME_CATEGORIES if new_type == "Income" else EXPENSE_CATEGORIES
+        default_cat_idx = cat_list.index(sel_row["Category"]) if sel_row["Category"] in cat_list else len(cat_list) - 1
+        new_category = st.selectbox("Category", cat_list, index=default_cat_idx, key="edit_category")
+        new_amount = st.number_input("Amount", min_value=0.01, step=0.01, value=float(sel_row["Amount"]), key="edit_amount")
+
+        btn_col1, btn_col2 = st.columns(2)
+        update_btn = btn_col1.form_submit_button("💾 Update Transaction")
+        delete_btn = btn_col2.form_submit_button("🗑️ Delete Transaction", help="Removes this transaction permanently")
+
+        if update_btn:
+            st.session_state.transactions.loc[selected_idx, ["Date", "Description", "Type", "Category", "Amount"]] = [
+                new_date, new_description, new_type, new_category, new_amount
+            ]
+            st.success("Transaction updated!")
+            st.rerun()
+
+        if delete_btn:
+            st.session_state.transactions = st.session_state.transactions.drop(selected_idx).reset_index(drop=True)
+            st.warning("Transaction deleted.")
+            st.rerun()
 else:
     st.info("👈 Add your first transaction using the sidebar to get started!")
 
