@@ -94,28 +94,46 @@ if not st.session_state.transactions.empty:
         f"{row['Date']} | {row['Description']} | {row['Type']} | {row['Category']} | ${row['Amount']:,.2f}": idx
         for idx, row in df.iterrows()
     }
+    tx_labels = list(tx_options.keys())
     selected_label = st.selectbox(
         "Select a transaction to edit or delete",
-        options=list(tx_options.keys()),
+        options=tx_labels,
         key="selected_transaction",
     )
     selected_idx = tx_options[selected_label]
-    sel_row = df.loc[selected_idx]
 
-    with st.form("edit_transaction_form"):
+    def sync_edit_fields():
+        """Load the selected transaction's values into the edit form widgets."""
+        row = st.session_state.transactions.loc[selected_idx]
+        st.session_state.edit_date = pd.to_datetime(row["Date"]).date()
+        st.session_state.edit_desc = row["Description"]
+        st.session_state.edit_type = row["Type"]
+        cats = INCOME_CATEGORIES if row["Type"] == "Income" else EXPENSE_CATEGORIES
+        st.session_state.edit_category = (
+            row["Category"] if row["Category"] in cats else cats[-1]
+        )
+        st.session_state.edit_amount = float(row["Amount"])
+
+    # Whenever the dropdown selection changes, refresh the form fields.
+    if st.session_state.get("edit_source_label") != selected_label:
+        st.session_state.edit_source_label = selected_label
+        sync_edit_fields()
+
+    with st.form("edit_transaction_form", clear_on_submit=False):
         st.markdown(f"**Editing:** `{selected_label}`")
-        new_date = st.date_input("Date", value=pd.to_datetime(sel_row["Date"]).date(), key="edit_date")
-        new_description = st.text_input("Description", value=sel_row["Description"], key="edit_desc")
+        new_date = st.date_input("Date", key="edit_date")
+        new_description = st.text_input("Description", key="edit_desc")
         new_type = st.selectbox(
             "Type",
             ["Income", "Expense"],
-            index=0 if sel_row["Type"] == "Income" else 1,
             key="edit_type",
+            on_change=sync_edit_fields,
         )
         cat_list = INCOME_CATEGORIES if new_type == "Income" else EXPENSE_CATEGORIES
-        default_cat_idx = cat_list.index(sel_row["Category"]) if sel_row["Category"] in cat_list else len(cat_list) - 1
-        new_category = st.selectbox("Category", cat_list, index=default_cat_idx, key="edit_category")
-        new_amount = st.number_input("Amount", min_value=0.01, step=0.01, value=float(sel_row["Amount"]), key="edit_amount")
+        new_category = st.selectbox("Category", cat_list, key="edit_category")
+        new_amount = st.number_input(
+            "Amount", min_value=0.01, step=0.01, format="%.2f", key="edit_amount"
+        )
 
         btn_col1, btn_col2 = st.columns(2)
         update_btn = btn_col1.form_submit_button("💾 Update Transaction")
@@ -126,11 +144,14 @@ if not st.session_state.transactions.empty:
                 new_date, new_description, new_type, new_category, new_amount
             ]
             st.success("Transaction updated!")
+            # Force the dropdown label to refresh next run (amount/description may have changed)
+            st.session_state.pop("edit_source_label", None)
             st.rerun()
 
         if delete_btn:
             st.session_state.transactions = st.session_state.transactions.drop(selected_idx).reset_index(drop=True)
             st.warning("Transaction deleted.")
+            st.session_state.pop("edit_source_label", None)
             st.rerun()
 else:
     st.info("👈 Add your first transaction using the sidebar to get started!")
